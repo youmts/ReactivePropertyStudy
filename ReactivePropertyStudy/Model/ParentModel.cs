@@ -20,14 +20,19 @@ namespace ReactivePropertyStudy.Model
 
         public ParentModel()
         {
+            // TODO: Dispose
+
+            // ObservableCollectionのColelctionChangedで
             Children.CollectionChanged += (sender, e) =>
                 {
+                    // Collectionが0件になったら、true
                     if (Children.Count == 0)
                     {
                         IsValid = new ReactiveProperty<bool>(true);
                         return;
                     }
 
+                    // すべての子要素のIsValidがtrueか？をReactiveProperty化
                     IsValid = Children.Select(x => x.IsValid)
                         .CombineLatestValuesAreAllTrue()
                         .ToReactiveProperty();
